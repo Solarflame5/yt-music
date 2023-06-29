@@ -1,6 +1,6 @@
 __all__ = (
     "Album",
-    "Artist"
+    "Artist",
     "Playlist",
     "Track",
 )
