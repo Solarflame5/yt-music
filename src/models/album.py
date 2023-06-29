@@ -1,10 +1,8 @@
-from dataclasses import dataclass
-
 from artist import Artist
+from base import BaseModel
 
 
-@dataclass
-class Album:
+class Album(BaseModel):
     id: str
     name: str
     artists: list[Artist]

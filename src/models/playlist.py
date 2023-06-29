@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-
+from base import BaseModel
 from track import Track
 
 
-@dataclass
-class Playlist:
+class Playlist(BaseModel):
     id: str
     privacy: str
     title: str
@@ -16,6 +14,6 @@ class Playlist:
     duration: str
     duration_seconds: int
     track_count: int
-    suggestions: list
+    suggestions: list[Track]
     related: list[Playlist]
     tracks: list[Track]
