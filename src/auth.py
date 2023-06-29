@@ -14,7 +14,7 @@ OAUTH_PATH = ROOT_PATH / ".oauth"
 OAUTH_PATH.mkdir(exist_ok=True)
 
 
-def browser_auth(app, session=Session(), view_size=(300, 480)):
+def browser_auth(session=Session(), view_size=(300, 480)):
     oauth = YTMusicOAuth(session=session)
     code = oauth.get_code()
     url = f"{code['verification_url']}?user_code={code['user_code']}"
@@ -22,6 +22,16 @@ def browser_auth(app, session=Session(), view_size=(300, 480)):
     view = QWebEngineView()
     # turn scrollbars off
     view.page().settings().setAttribute(QWebEngineSettings.WebAttribute.ShowScrollBars, False)
+
+    def url_changed(new_url: QUrl):
+        if "done?authuser=0" in new_url.toString():
+            print("Login success!")
+            view.close()
+
+            token = oauth.get_token_from_code(code["device_code"])
+            oauth.dump_token(token, str(OAUTH_PATH / "oauth.json"))
+
+    view.urlChanged.connect(url_changed)
 
     view.load(QUrl(url))
 
@@ -31,6 +41,6 @@ def browser_auth(app, session=Session(), view_size=(300, 480)):
 
 if __name__ == "__main__":
     app = QApplication()
-    view = browser_auth(app)
+    view = browser_auth()
     view.show()
     sys.exit(app.exec_())
