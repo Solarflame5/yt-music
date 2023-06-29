@@ -8,6 +8,8 @@ from PySide6.QtWidgets import QApplication
 from requests import Session
 from ytmusicapi.auth.oauth import YTMusicOAuth
 
+__all__ = ("browser_auth",)
+
 ROOT_PATH = Path(__file__).parent
 OAUTH_PATH = ROOT_PATH / ".oauth"
 
@@ -21,7 +23,9 @@ def browser_auth(session=Session(), view_size=(300, 480)):
 
     view = QWebEngineView()
     # turn scrollbars off
-    view.page().settings().setAttribute(QWebEngineSettings.WebAttribute.ShowScrollBars, False)
+    view.page().settings().setAttribute(
+        QWebEngineSettings.WebAttribute.ShowScrollBars, False
+    )
 
     def url_changed(new_url: QUrl):
         if "done?authuser=0" in new_url.toString():
